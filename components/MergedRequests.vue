@@ -7,7 +7,7 @@
   import Requests from './Requests.vue';
   
   export default {
-      name:'Open',
+      name:'OpenRequests',
       components:[Requests],
       async created(){
           await this.fetchRequests('merged')

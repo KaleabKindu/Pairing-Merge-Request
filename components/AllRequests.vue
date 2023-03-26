@@ -4,10 +4,10 @@
   
   <script>
   import Requests from './Requests.vue';
-  import {mapActions, mapState} from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   
   export default {
-      name:'All',
+      name:'AllRequests',
       components:[Requests],
       async created(){
           await this.fetchRequests('all')
