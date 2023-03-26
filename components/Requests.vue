@@ -1,27 +1,56 @@
 <template>
     <v-container>
         <v-col v-for="request in requests" :key="request.id">
-            <v-col class="d-flex justify-space-between"> 
-                <v-col>
-                    <h3>{{request.title}}</h3> 
-                </v-col>
-               
-
-                <v-col md="3" class="d-flex justify-end align-center"> 
-                    <v-chip color="green" outlined>open</v-chip>
-                    <v-icon class="mx-1" :color="request.work_in_progress ? 'red':'green'">{{ request.work_in_progress ? 'mdi-account':'mdi-close' }}</v-icon>
-                    <v-avatar v-for="assignee in request.assignees" :key="assignee.id" size="20" class="mx-1">
-                        <v-img :src="assignee.avatar_url"></v-img>
-                    </v-avatar> 
-                    <v-icon class='outlined'>mdi-forum</v-icon>
-                    <p class="my-auto ml-1">{{ request.user_notes_count }} </p>
-                </v-col>
+            <v-col class="d-flex justify-space-between flex-wrap"> 
+                <div :style="{'max-width':'80%'}" class="d-flex">
+                    <h3>{{request.title + ' '}}</h3> 
+                    <p v-if="request.task_completion_status.count > 0" class="grey--text my-auto ml-2"> {{ request.task_completion_status.completed_count }} of {{ request.task_completion_status.count }} checklist items completed</p>
+                </div>
+                <div class="d-flex justify-end  align-center"> 
+                    <v-chip v-if="request.state !== 'opened' " class="lighten-5" :color="chipColors[request.state]" :style="{'color':chipColors[request.state]}">{{request.state}}</v-chip>
+                    <v-avatar class="mx-1" size="20" :style="{'border': '1px solid green',' border-radius':'50%'}">
+                        <v-icon small class="mx-1" :color="request.merge_when_pipeline_succeeds ? 'red':'green'">{{ request.merge_when_pipeline_succeeds ? 'mdi-close':'mdi-check' }}</v-icon>
+                    </v-avatar>
+                    <v-tooltip top v-for="assignee in request.assignees" :key="assignee.id" >
+                        <template v-slot:activator="{on, attrs}">
+                            <v-avatar v-bind="attrs" v-on="on"  size="20" >
+                                <v-img :src="assignee.avatar_url"></v-img>
+                            </v-avatar> 
+                        </template>
+                        Assigned to {{ assignee.name }}
+                    </v-tooltip>
+                    <v-tooltip top v-if="request.approvals_before_merge">
+                        <template v-slot:activator="{on, attrs}">
+                            <div v-bind="attrs" v-on="on" class="d-flex mx-1">
+                                <v-icon color="green">mdi-account-check-outline</v-icon>
+                                <p class="green--text my-auto">Approved</p>
+                            </div>
+                        </template>
+                        <span>{{ request.approvals_before_merge }} approvers</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                        <template v-slot:activator="{on, attrs}">
+                            <div v-bind="attrs" v-on="on" class="d-flex">
+                                <v-icon class='outlined'>mdi-forum</v-icon>
+                                <p class="my-auto ml-1">{{ request.user_notes_count }} </p>
+                            </div>
+                        </template>
+                        <span>Comments</span>
+                    </v-tooltip>
+                    
+                </div>
             </v-col>
-            <v-col class="d-flex align-center justify-space-between">
-                <v-col class="d-flex">
+            <v-col class="d-flex align-center justify-space-between flex-wrap">
+                <div class="d-flex">
                     <p class="grey--text my-auto" :set="[time, format] = getTimeDifference(request.created_at)">{{ request.reference }} {{ '\u00B7' }} created {{ time }} {{ format }} ago by <span class="black--text">{{ request.author.name }}</span></p>
-                <v-chip small :color="label.color ? label.color:'green'" class='mx-1' :style="{'color':label.text_color }" v-for="label in request.labels" :key="label.id">{{ label.name }} </v-chip>
-                </v-col>
+                    <v-tooltip top v-for="label in request.labels" :key="label.id" max-width="250">
+                        <template v-slot:activator="{on, attrs}">
+                            <v-chip v-bind="attrs" v-on="on" small :color="label.color ? label.color:'green'" class="mx-1" :style="{'color':label.text_color }" >{{ label.name }} </v-chip>
+
+                        </template>
+                        {{ label.description }}
+                    </v-tooltip>
+                </div>
                 <p class="my-auto" :set="[time, format] = getTimeDifference(request.updated_at)">updated {{ time }} {{ format }} ago </p>
             </v-col>
            <v-divider></v-divider>
@@ -36,12 +65,15 @@
       props:{
         requests: Array
       },
-      data() {
-    return {
-      leftColor: '#007aff', // First color
-      rightColor: '#ff3b30' // Second color
-    };
-  },
+      data(){
+        return {
+            chipColors:{
+                opened:'',
+                closed:'red',
+                merged:'blue'
+            }
+        }
+      },
       methods:{
         getTimeDifference(targetTime) {
             // Convert the target time to a Date object
