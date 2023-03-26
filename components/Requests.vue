@@ -8,7 +8,7 @@
                 </div>
                 <div class="d-flex justify-end  align-center"> 
                     <v-chip v-if="request.state !== 'opened' " class="lighten-5" :color="chipColors[request.state]" :style="{'color':chipColors[request.state]}">{{request.state}}</v-chip>
-                    <v-avatar class="mx-1" size="20" :style="{'border': '1px solid green',' border-radius':'50%'}">
+                    <v-avatar class="mx-1" size="20" :style="{'border': request.merge_when_pipeline_succeeds ? '1px solid red':'1px solid green',' border-radius':'50%'}">
                         <v-icon small class="mx-1" :color="request.merge_when_pipeline_succeeds ? 'red':'green'">{{ request.merge_when_pipeline_succeeds ? 'mdi-close':'mdi-check' }}</v-icon>
                     </v-avatar>
                     <v-tooltip top v-for="assignee in request.assignees" :key="assignee.id" >
