@@ -8,9 +8,9 @@
   
   export default {
       name:'OpenRequests',
-      components:[Requests],
+      components:{ Requests },
       async created(){
-          await this.fetchRequests('merged')
+          await this.fetchRequests({status:'merged',sort:'desc',order_by:'updated_at'})
       },
       computed:{
           ...mapState(['merged'])

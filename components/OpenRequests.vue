@@ -8,9 +8,9 @@ import {mapActions, mapState} from 'vuex';
 
 export default {
     name:'OpenRequests',
-    components:[Requests],
+    components:{ Requests },
     async created(){
-        await this.fetchRequests('opened')
+        await this.fetchRequests({status:'opened',sort:'desc',order_by:'updated_at'})
     },
     computed:{
         ...mapState(['open'])

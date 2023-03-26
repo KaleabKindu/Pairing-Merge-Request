@@ -6,15 +6,15 @@
           align-tabs="center"
         >
 
-          <v-tab>Open </v-tab>
-          <v-tab>Merged</v-tab>
-          <v-tab>Closed</v-tab>
-          <v-tab>All </v-tab>
+          <v-tab value="opened">Open </v-tab>
+          <v-tab value="merged">Merged</v-tab>
+          <v-tab value="closed">Closed</v-tab>
+          <v-tab value="all">All </v-tab>
         </v-tabs>
         <v-col class="d-flex">
             <v-select :style="{'max-width':'200px'}" class='rounded-tr-0 rounded-br-0' dense hide-details outlined label="Recent Searches" :items="history"></v-select>
             <v-text-field class='rounded-tl-0 rounded-bl-0'  dense outlined v-model="searchQuery" placeholder="Search or filter results"></v-text-field>
-            <v-select :style="{'max-width':'200px'}" class='ml-2' dense hide-details outlined label="Update date" :items="history"></v-select>
+            <v-select v-model="filter" :style="{'max-width':'200px'}" class='ml-2' dense hide-details outlined label="Update date" :items="filters" ></v-select>
         </v-col>
         <v-tabs-items v-model="tab"> 
           <v-tab-item >
@@ -49,7 +49,14 @@ export default {
 
     data() {
         return {
-            tab: 0,
+            tab: 'merged',
+            desc:true,
+            filter:'update',
+            history:[],
+            searchQuery:'',
+            filters:[
+              'Priority','Created date','Closed date','Updated date','Milestone due date','Popularity','Label Priority','Merged date','Title'
+            ]
         };
     },
 }

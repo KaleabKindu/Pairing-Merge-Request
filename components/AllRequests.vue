@@ -8,9 +8,9 @@
   
   export default {
       name:'AllRequests',
-      components:[Requests],
+      components:{ Requests },
       async created(){
-          await this.fetchRequests('all')
+          await this.fetchRequests({status:'all',sort:'desc',order_by:'updated_at'})
       },
       computed:{
           ...mapState(['all'])

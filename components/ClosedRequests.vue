@@ -8,9 +8,9 @@ import {mapActions, mapState} from 'vuex';
   
   export default {
       name:'ClosedRequests',
-      components:[Requests],
+      components:{ Requests },
       async created(){
-          await this.fetchRequests('closed')
+          await this.fetchRequests({status:'closed',sort:'desc',order_by:'updated_at'})
       },
       computed:{
           ...mapState(['closed'])

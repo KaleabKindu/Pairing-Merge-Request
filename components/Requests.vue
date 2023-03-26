@@ -2,9 +2,9 @@
     <v-container>
         <v-col v-for="request in requests" :key="request.id">
             <v-col class="d-flex justify-space-between flex-wrap"> 
-                <div :style="{'max-width':'80%'}" class="d-flex">
+                <div :style="{'width':'80%'}" >
                     <h3>{{request.title + ' '}} </h3> 
-                    <p v-if="request.task_completion_status.count > 0" style="'display':'inline'" class="grey--text my-auto ml-2 p"> {{ request.task_completion_status.completed_count }} of {{ request.task_completion_status.count }} checklist items completed</p>
+                    <p v-if="request.task_completion_status.count > 0" :style="{'display':'inline'}" class="grey--text my-auto ml-2"> {{ request.task_completion_status.completed_count }} of {{ request.task_completion_status.count }} checklist items completed</p>
                 </div>
                 <div class="d-flex justify-end  align-center"> 
                     <v-chip v-if="request.state !== 'opened' " class="lighten-5" :color="chipColors[request.state]" :style="{'color':chipColors[request.state]}">{{request.state}}</v-chip>
