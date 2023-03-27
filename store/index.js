@@ -14,9 +14,9 @@ const actions = {
     async fetchRequests({commit,state},params){
        try  {
         const headers = { Authorization: `Bearer ${state.personalAccessToken}` };
-        const parameters = `scope=all&sort=${params.sort}&state=${params.status}&order_by=${params.order_by}`
+        const parameters = `sort=${params.sort}&state=${params.status}&order_by=${params.order_by}&with_labels_details=true`
 
-        const response = await this.$axios.get(`https://gitlab.com/api/v4/projects/7764/merge_requests?${parameters}`,{ headers })
+        const response = await this.$axios.get(`https://gitlab.com/api/v4/projects/7764/merge_requests?${parameters}`,{headers})
         if(params.status === 'opened'){
             commit('setOpenRequests', response.data)
         }else if (params.status === 'closed'){

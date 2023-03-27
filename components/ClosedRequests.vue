@@ -1,14 +1,18 @@
 <template>
-    <Requests :requests="closed"/>
-  </template>
+  <v-container>
+    <v-col v-for="request in closed" :key="request.id">
+      <Request :request="request"/>
+    </v-col>
+  </v-container>
+</template>
   
   <script>
 import {mapActions, mapState} from 'vuex';
-  import Requests from './Requests.vue';
+  import Request from './Request.vue';
   
   export default {
       name:'ClosedRequests',
-      components:{ Requests },
+      components:{ Request },
       async created(){
           await this.fetchRequests({status:'closed',sort:'desc',order_by:'updated_at'})
       },

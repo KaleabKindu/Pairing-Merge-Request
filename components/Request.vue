@@ -1,10 +1,8 @@
 <template>
     <v-container>
-        <v-col v-for="request in requests" :key="request.id">
             <v-col class="d-flex justify-space-between flex-wrap"> 
                 <div :style="{'width':'80%'}" class='d-flex' >
-                    <h3>{{request.title + ' '}} <span v-if="request.task_completion_status.count > 0" :style="{'font-size':'medium'}" class="grey--text my-auto ml-2"> {{ request.task_completion_status.completed_count }} of {{ request.task_completion_status.count }} checklist items completed</span>
- </h3> 
+                    <h3>{{request.title + ' '}} <span v-if="request.task_completion_status.count > 0" :style="{'font-size':'medium'}" class="grey--text my-auto ml-2"> {{ request.task_completion_status.completed_count }} of {{ request.task_completion_status.count }} checklist items completed</span></h3> 
                 </div>
                 <div class="d-flex justify-end  align-center"> 
                     <v-chip v-if="request.state !== 'opened' " class="lighten-5" :color="chipColors[request.state]" :style="{'color':chipColors[request.state]}">{{request.state}}</v-chip>
@@ -54,7 +52,9 @@
                     <p class="grey--text my-auto" :set="[time, format] = getTimeDifference(request.created_at)">{{ request.reference }} {{ '\u00B7' }} created {{ time }} {{ format }} ago by <span class="black--text">{{ request.author.name }}</span></p>
                     <v-tooltip top v-for="label in request.labels" :key="label.id" max-width="250">
                         <template v-slot:activator="{on, attrs}">
-                            <v-chip v-bind="attrs" v-on="on" small :color="label.color ? label.color:'green'" class="mx-1" :style="{'color':label.text_color }" >{{ label.name }} </v-chip>
+                            <v-flex>
+                                <v-chip v-bind="attrs" v-on="on" small :color="label.color ? label.color:'green'" class="mx-1" :style="{'color':label.text_color }" >{{ label.name }} </v-chip>
+                            </v-flex>
 
                         </template>
                         {{ label.description }}
@@ -63,16 +63,15 @@
                 <p class="my-auto" :set="[time, format] = getTimeDifference(request.updated_at)">updated {{ time }} {{ format }} ago </p>
             </v-col>
            <v-divider></v-divider>
-        </v-col>
     </v-container>
   </template>
   
   <script>
 
   export default {
-      name:'requests',
+      name:'request',
       props:{
-        requests: Array
+        request: Object
       },
       data(){
         return {

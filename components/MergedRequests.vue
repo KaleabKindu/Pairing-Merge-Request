@@ -1,14 +1,18 @@
 <template>
-    <Requests :requests="merged"/>
-  </template>
+  <v-container>
+    <v-col v-for="request in merged" :key="request.id">
+      <Request :request="request"/>
+    </v-col>
+  </v-container>
+</template>
   
   <script>
   import {mapActions, mapState} from 'vuex';
-  import Requests from './Requests.vue';
+  import Request from './Request.vue';
   
   export default {
       name:'OpenRequests',
-      components:{ Requests },
+      components:{ Request },
       async created(){
           await this.fetchRequests({status:'merged',sort:'desc',order_by:'updated_at'})
       },

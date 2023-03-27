@@ -1,14 +1,19 @@
 <template>
-  <Requests :requests="open"/>
+  <v-container>
+    <v-col v-for="request in open" :key="request.id">
+      <Request :request="request"/>
+    </v-col>
+  </v-container>
+
 </template>
 
 <script>
-import Requests from './Requests.vue';
+import Request from './Request.vue';
 import {mapActions, mapState} from 'vuex';
 
 export default {
     name:'OpenRequests',
-    components:{ Requests },
+    components:{ Request },
     async created(){
         await this.fetchRequests({status:'opened',sort:'desc',order_by:'updated_at'})
     },
