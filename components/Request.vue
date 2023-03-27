@@ -1,10 +1,10 @@
 <template>
-    <v-container>
-            <v-col class="d-flex justify-space-between flex-wrap"> 
-                <div :style="{'width':'80%'}" class='d-flex' >
+    <v-container class="pa-0">
+            <div class="d-flex justify-space-between flex-wrap"> 
+                <div :style="{'max-width':'80%'}" class='d-flex' >
                     <h3>{{request.title + ' '}} <span v-if="request.task_completion_status.count > 0" :style="{'font-size':'medium'}" class="grey--text my-auto ml-2"> {{ request.task_completion_status.completed_count }} of {{ request.task_completion_status.count }} checklist items completed</span></h3> 
                 </div>
-                <div class="d-flex justify-end  align-center"> 
+                <v-flex class="d-flex justify-end  align-center"> 
                     <v-chip v-if="request.state !== 'opened' " class="lighten-5" :color="chipColors[request.state]" :style="{'color':chipColors[request.state]}">{{request.state}}</v-chip>
                     <v-avatar class="mx-1" size="20" :style="{'border': request.merge_when_pipeline_succeeds ? '1px solid red':'1px solid green',' border-radius':'50%'}">
                         <v-icon small class="mx-1" :color="request.merge_when_pipeline_succeeds ? 'red':'green'">{{ request.merge_when_pipeline_succeeds ? 'mdi-close':'mdi-check' }}</v-icon>
@@ -45,24 +45,24 @@
                         <span>Comments</span>
                     </v-tooltip>
                     
-                </div>
-            </v-col>
-            <v-col class="d-flex align-center justify-space-between flex-wrap">
+                </v-flex>
+            </div>
+            <div class="d-flex align-center justify-space-between flex-wrap">
                 <div class="d-flex">
                     <p class="grey--text my-auto" :set="[time, format] = getTimeDifference(request.created_at)">{{ request.reference }} {{ '\u00B7' }} created {{ time }} {{ format }} ago by <span class="black--text">{{ request.author.name }}</span></p>
                     <v-tooltip top v-for="label in request.labels" :key="label.id" max-width="250">
-                        <template v-slot:activator="{on, attrs}">
+                        <template v-slot:activator="{on, attrs}" v-if="label && label.name">
                             <v-flex>
-                                <v-chip v-bind="attrs" v-on="on" small :color="label.color ? label.color:'green'" class="mx-1" :style="{'color':label.text_color }" >{{ label.name }} </v-chip>
+                                <v-chip v-bind="attrs" v-on="on" small :class="label.description? 'pr-1':''" :color="label.color ? label.color:'green'" class="mx-1" :style="{'color':label.text_color }" >{{ !label.description ?  label.name.split('::')[0]:label.name }} <span class="white black--text ml-1 pl-1 rounded-r-xl pr-1">{{ label.description ? label.name.split('::')[1]:'' }}</span> </v-chip>
                             </v-flex>
 
                         </template>
-                        {{ label.description }}
+                        {{ label && label.description ?  label.description:'Scoped label' }}
                     </v-tooltip>
                 </div>
                 <p class="my-auto" :set="[time, format] = getTimeDifference(request.updated_at)">updated {{ time }} {{ format }} ago </p>
-            </v-col>
-           <v-divider></v-divider>
+            </div>
+            <v-divider class="mt-3"></v-divider>
     </v-container>
   </template>
   

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <v-col v-for="request in closed" :key="request.id">
       <Request :request="request"/>
     </v-col>
